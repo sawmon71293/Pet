@@ -22,8 +22,9 @@ import Menu from '@mui/material/Menu';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PropTypes from 'prop-types';
 
-const AddPet = (petList) => {
+const AddPet = ({ petList }) => {
   const cities = ['Yangon', 'Mandalay', 'Lashio'];
   const townships = {
     Yangon: ['Hlaing', 'Mayangone', 'Yankin'],
@@ -371,6 +372,10 @@ const AddPet = (petList) => {
       />
     </>
   );
+};
+
+AddPet.propTypes = {
+  petList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default AddPet;
