@@ -1,9 +1,21 @@
-import { redirect } from "react-router-dom";
+import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { deleteItem } from '../helper';
+import { deleteItem, deletePet } from '../helper';
 
-export async function logoutAction() {
-    deleteItem({ key: "userName" })
-    toast.success("You've deleted your account!");
-    return redirect("/")
-}
+export const logoutAction = () => {
+  deleteItem({ key: 'userName' });
+  toast.success("You've deleted your account!");
+  return redirect('/');
+};
+
+export const deletePetAction = async ({ request }) => {
+  const data = await request.formData();
+  const { id } = Object.fromEntries(data);
+  try {
+    deletePet(id);
+    toast.success("You've deleted your pet!");
+    return redirect('/');
+  } catch (e) {
+    throw new Error('There was a problem deleting your pet.');
+  }
+};

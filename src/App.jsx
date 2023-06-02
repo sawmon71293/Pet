@@ -1,12 +1,11 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
 import Dashboard, { dashboardAction, dashboardLoader } from './pages/Dashboard';
 import Error from './pages/Error';
 import Main, { mainLoader } from './layout/Main';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { logoutAction } from './actions/logout';
-
+import { logoutAction, deletePetAction } from './actions/logout';
 
 const router = createBrowserRouter([
   {
@@ -20,17 +19,21 @@ const router = createBrowserRouter([
         element: <Dashboard />,
         loader: dashboardLoader,
         action: dashboardAction,
-      }
-    ]
+      },
+    ],
   },
   {
-    path: "logout",
-    action: logoutAction
-  }
-])
+    path: 'logout',
+    action: logoutAction,
+  },
+  {
+    path: 'delete',
+    action: deletePetAction,
+  },
+]);
 function App() {
   return (
-    <div className='App'>
+    <div className="App">
       <RouterProvider router={router} />
       <ToastContainer />
     </div>

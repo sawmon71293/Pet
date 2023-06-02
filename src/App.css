@@ -1,25 +1,24 @@
-*{
-  margin:0;
-  border:0;
+* {
+  margin: 0;
+  border: 0;
   box-sizing: border-box;
 }
 
-nav{
+nav {
   margin-bottom: 1rem;
 }
 
-#addPatient{
-  background-color: #54BAB9;
-  color:white;
+#addPatient {
+  background-color: #54bab9;
+  color: white;
   position: absolute;
-  right:108px;
+  right: 108px;
   top: 7rem;
 }
 
-#addPatient:hover{
+#addPatient:hover {
   background-color: white;
-  color:#54BAB9;
-  
+  color: #54bab9;
 }
 
 .container {
