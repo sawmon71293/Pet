@@ -4,6 +4,7 @@ import { deleteItem, deletePet } from '../helper';
 
 export const logoutAction = () => {
   deleteItem({ key: 'userName' });
+  deleteItem({ key: 'pets' });
   toast.success("You've deleted your account!");
   return redirect('/');
 };

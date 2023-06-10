@@ -2,15 +2,16 @@ import React from 'react';
 import { Form } from 'react-router-dom';
 // library
 import { UserPlusIcon } from '@heroicons/react/24/solid';
+import { Button } from '@mui/material';
 import illustration from '../assets/clinic-pet.webp';
 
 const Intro = () => (
-  <div className="intro">
+  <div className="flex justify-center items-center">
     <div>
-      <h1>
+      <h1 className="font-semibold">
         {' '}
         Take care of
-        <span className="accent">
+        <span className="text-green-500 ">
           {' '}
           Your Pet
         </span>
@@ -19,24 +20,34 @@ const Intro = () => (
         Regularly visit the clinic is the way to go.
       </p>
       <Form
+        className="mt-5"
         method="post"
       >
-        <input
-          type="text"
-          name="userName"
-          required
-          placeholder="What is your name?"
-          aria-label="Your name"
-          autoComplete="given-name"
-        />
-        <input type="hidden" name="_action" value="newUser" />
-        <button type="submit" className="btn btn--dark">
-          <span>Create Account</span>
-          <UserPlusIcon width={20} />
-        </button>
+        <div className="flex ">
+          <div className="mr-3">
+            <input
+              type="text"
+              name="userName"
+              required
+              placeholder="What is your name?"
+              aria-label="Your name"
+              autoComplete="given-name"
+              className="py-2 outline outline-[#007AC2] w-full rounded-md border placeholder: p-2"
+            />
+          </div>
+          <div>
+            <input type="hidden" name="_action" value="newUser" />
+            <Button type="submit" className="flex space-x-2 border-[green]">
+              <span>Create Account</span>
+              <UserPlusIcon width={20} />
+            </Button>
+          </div>
+        </div>
       </Form>
     </div>
-    <img src={illustration} alt="Doctor with dog" width={600} />
+    <div className="mr-5">
+      <img src={illustration} alt="Doctor with dog" width={600} />
+    </div>
   </div>
 );
 

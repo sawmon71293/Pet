@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFetcher } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -48,6 +48,7 @@ const AddPet = ({ petList }) => {
   const openAnchor = Boolean(anchorEl);
   const [action, setAction] = useState('newPet');
   const [id, setId] = useState('');
+  const [formValid, setFormValid] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -187,8 +188,10 @@ const AddPet = ({ petList }) => {
               handleEdit(selectedRow);
             }}
             >
-              <CreateIcon />
-              Edit
+              <Button className="space-x-2">
+                <CreateIcon />
+                <p>Edit</p>
+              </Button>
             </MenuItem>
 
             <fetcher.Form action="/delete" method="post">
@@ -199,17 +202,25 @@ const AddPet = ({ petList }) => {
                 }
               }}
               >
-                <DeleteOutlineIcon />
-                <input type="hidden" name="id" value={id} />
-                <Button type="submit">Delete</Button>
+                <Button type="submit" className="space-x-2">
+                  <DeleteOutlineIcon />
+                  <input type="hidden" name="id" value={id} />
+                  <p>Delete</p>
+                </Button>
               </MenuItem>
             </fetcher.Form>
-
           </Menu>
         </div>
       ),
     },
   ];
+  useEffect(() => {
+    // Check if all required fields are filled in
+    const isFormValid = petName && status && pawrent && breed && gender
+      && birthDate && contactPhoneNo && address && city && township;
+    setFormValid(isFormValid);
+  }, [petName, status, pawrent, breed, gender, birthDate, contactPhoneNo,
+    address, city, township]);
 
   return (
     <>
@@ -218,7 +229,7 @@ const AddPet = ({ petList }) => {
         variant="outlined"
         onClick={handleClickOpen}
         sx={{
-          width: 200, padding: 1, margin: 2, height: 30,
+          width: 200, padding: 1, margin: 2, height: 30, marginRight: '4.5rem',
         }}
       >
         Add new patient
@@ -240,7 +251,7 @@ const AddPet = ({ petList }) => {
             </DialogContentText>
 
             <div style={{ marginTop: '20px' }}>
-              <TextField name="petName" id="petName" label="Pet Name" onChange={handlePetNameChange} value={petName} variant="standard" />
+              <TextField required name="petName" id="petName" label="Pet Name" onChange={handlePetNameChange} value={petName} variant="standard" />
               <input type="hidden" name="_action" value={action} />
               <input type="hidden" name="id" value={id} />
               <FormControl ariant="standard" sx={{ m: 1, minWidth: 200, ml: 10 }}>
@@ -251,6 +262,7 @@ const AddPet = ({ petList }) => {
                   value={status}
                   label="Status"
                   onChange={handleStatusChange}
+                  required
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -262,7 +274,7 @@ const AddPet = ({ petList }) => {
               </FormControl>
             </div>
             <div style={{ marginTop: '20px' }}>
-              <TextField id="standard-basic" onChange={handlePawrentChange} label="Pawrent" name="pawrent" value={pawrent} variant="standard" />
+              <TextField required id="standard-basic" onChange={handlePawrentChange} label="Pawrent" name="pawrent" value={pawrent} variant="standard" />
               <FormControl ariant="standard" sx={{ m: 1, minWidth: 200, ml: 10 }}>
                 <InputLabel id="breed">Breed</InputLabel>
                 <Select
@@ -273,6 +285,7 @@ const AddPet = ({ petList }) => {
                   value={breed}
                   label="Breed"
                   onChange={handleBreedChange}
+                  required
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -292,6 +305,7 @@ const AddPet = ({ petList }) => {
                   name="gender"
                   value={gender}
                   onChange={handleGenderChange}
+                  required
                 >
                   <FormControlLabel name="gender" value="male" control={<Radio />} label="Male" />
                   <FormControlLabel name="gender" value="female" control={<Radio />} label="Female" />
@@ -299,13 +313,13 @@ const AddPet = ({ petList }) => {
 
               </FormControl>
               <div>
-                <DatePicker name="dob" value={birthDate} selected={birthDate} onChange={(birthDate) => setBirthDate(birthDate)} />
+                <DatePicker required name="dob" value={birthDate} selected={birthDate} onChange={(birthDate) => setBirthDate(birthDate)} />
               </div>
 
             </div>
             <div style={{ marginTop: '20px' }}>
-              <TextField sx={{ mr: 10 }} id="standard-basic" onChange={handleContactPhoneNo} name="contactPhoneNo" value={contactPhoneNo} label="Contact Phone No" variant="standard" />
-              <TextField id="standard-basic" label="Address" onChange={handleAddress} name="address" value={address} variant="standard" />
+              <TextField required sx={{ mr: 10 }} id="standard-basic" onChange={handleContactPhoneNo} name="contactPhoneNo" value={contactPhoneNo} label="Contact Phone No" variant="standard" />
+              <TextField required id="standard-basic" label="Address" onChange={handleAddress} name="address" value={address} variant="standard" />
             </div>
             <div style={{ marginTop: '20px', display: 'flex' }}>
               <FormControl ariant="standard" sx={{ m: 1, minWidth: 200, mt: 5 }}>
@@ -318,6 +332,7 @@ const AddPet = ({ petList }) => {
                   value={city}
                   label="City"
                   onChange={handleCityChange}
+                  required
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -337,6 +352,7 @@ const AddPet = ({ petList }) => {
                   value={township}
                   label="Township"
                   onChange={handleTownshipChange}
+                  required
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -350,7 +366,7 @@ const AddPet = ({ petList }) => {
 
           </DialogContent>
           <DialogActions>
-            <Button type="submit" onClick={handleClose}>
+            <Button type="submit" onClick={handleClose} disabled={!formValid}>
               {action === 'update' ? 'Update' : 'Save'}
             </Button>
             <Button onClick={handleClose} autoFocus>
@@ -359,23 +375,34 @@ const AddPet = ({ petList }) => {
           </DialogActions>
         </Dialog>
       </fetcher.Form>
-      <DataGrid
-        rows={petList}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-      />
+      {petList && petList.length > 0 ? (
+        <DataGrid
+          rows={petList}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+        />
+      )
+
+        : (
+          <div className="flex justify-center">
+            <p className="text-[#54BAB9] text-semibold">No patients today.</p>
+          </div>
+        )}
     </>
   );
 };
 
 AddPet.propTypes = {
-  petList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  petList: PropTypes.arrayOf(PropTypes.object),
+};
+AddPet.defaultProps = {
+  petList: [],
 };
 
 export default AddPet;
